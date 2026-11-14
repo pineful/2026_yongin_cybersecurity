@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>용인대학교 매치업 사이버보안 심화과정 교안 | 박민순</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#070c18; --card:#0f172a; --card-alt:#162035; --line:#1e293b;
+    --sky:#38bdf8; --green:#10b981; --amber:#f59e0b;
+    --text:#f8fafc; --muted:#94a3b8;
+    --sans:'Pretendard',-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo',sans-serif;
+    --mono:'JetBrains Mono',monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    background:var(--bg); color:var(--text); font-family:var(--sans);
+    min-height:100vh; padding:2.75rem 1.25rem 4rem;
+    display:flex; flex-direction:column; align-items:center;
+    word-break:keep-all; -webkit-text-size-adjust:100%;
+  }
+  .wrap{width:100%; max-width:860px}
+  header{text-align:center; margin-bottom:2.5rem}
+  .badge{
+    display:inline-block; padding:.35rem 1rem; border-radius:9999px;
+    background:rgba(56,189,248,.12); border:1px solid rgba(56,189,248,.3);
+    color:var(--sky); font-size:.82rem; font-weight:700; letter-spacing:.02em;
+    margin-bottom:1.1rem;
+  }
+  h1{font-size:1.95rem; font-weight:800; letter-spacing:-.03em; line-height:1.35}
+  .sub{margin-top:.7rem; color:var(--muted); font-size:.95rem; line-height:1.6}
+  h2{
+    font-size:.86rem; font-weight:700; color:var(--sky); letter-spacing:.09em;
+    text-transform:uppercase; margin:2.4rem 0 .9rem; font-family:var(--mono);
+  }
+  .grid{display:grid; gap:.85rem}
+  a.card{
+    display:block; text-decoration:none; color:inherit;
+    background:var(--card); border:1px solid var(--line); border-radius:14px;
+    padding:1.1rem 1.25rem; transition:border-color .18s, transform .18s, background .18s;
+  }
+  a.card:hover, a.card:focus-visible{border-color:rgba(56,189,248,.6); background:var(--card-alt); transform:translateY(-2px)}
+  .card .meta{display:flex; align-items:center; gap:.55rem; margin-bottom:.45rem}
+  .tag{
+    font-size:.7rem; font-weight:700; padding:.15rem .5rem; border-radius:5px;
+    font-family:var(--mono); letter-spacing:.03em;
+  }
+  .tag.vuln{color:var(--amber); background:rgba(245,158,11,.12); border:1px solid rgba(245,158,11,.3)}
+  .tag.sec{color:var(--green); background:rgba(16,185,129,.12); border:1px solid rgba(16,185,129,.3)}
+  .tag.doc{color:var(--sky); background:rgba(56,189,248,.1); border:1px solid rgba(56,189,248,.28)}
+  .card .title{font-size:1.05rem; font-weight:700; letter-spacing:-.01em; line-height:1.45}
+  .card .desc{margin-top:.35rem; font-size:.86rem; color:var(--muted); line-height:1.55}
+  .note{
+    margin-top:2.6rem; padding:1.1rem 1.25rem; border-radius:12px;
+    background:rgba(255,255,255,.03); border:1px solid var(--line);
+    font-size:.85rem; color:var(--muted); line-height:1.75;
+  }
+  .note strong{color:var(--text); font-weight:600}
+  footer{margin-top:2.2rem; text-align:center; font-size:.78rem; color:#64748b; line-height:1.7}
+  @media (max-width:480px){
+    body{padding:2rem 1rem 3rem}
+    h1{font-size:1.6rem}
+    .sub{font-size:.88rem}
+    .card .title{font-size:.98rem}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="badge">YONGIN UNIVERSITY · MATCHUP</div>
+    <h1>사이버보안 심화과정 교안</h1>
+    <p class="sub">용인대학교 매치업 사이버보안 심화과정 수업자료입니다. 휴대폰이나 PC 브라우저에서 바로 열립니다.<br>강사 박민순</p>
+  </header>
+
+  <h2>3주차</h2>
+  <div class="grid">
+    <a class="card" href="week3/vuln.html">
+      <div class="meta"><span class="tag vuln">취약점 진단</span><span class="tag doc">3주차</span></div>
+      <div class="title">관리자 접근제어 미흡과 톰캣 관리자 페이지 침투</div>
+      <div class="desc">관리 콘솔 노출 점검부터 톰캣 매니저 인증 우회, war 파일 배포까지 단계별 실습</div>
+    </a>
+    <a class="card" href="week3/sec.html">
+      <div class="meta"><span class="tag sec">보안관제</span><span class="tag doc">3주차</span></div>
+      <div class="title">리눅스 로그 관리</div>
+      <div class="desc">로그 체계와 rsyslog 설정, logrotate 순환 정책, 침해 흔적을 남기는 로그 분석</div>
+    </a>
+  </div>
+
+  <h2>2주차</h2>
+  <div class="grid">
+    <a class="card" href="week2/vuln-assessment-course.html">
+      <div class="meta"><span class="tag vuln">취약점 진단</span><span class="tag doc">2주차</span></div>
+      <div class="title">스캔과 식별, FTP·NFS 취약점</div>
+      <div class="desc">Nmap 스캔과 서비스 식별, FTP 익명 접속과 NFS no_root_squash 권한 상승</div>
+    </a>
+    <a class="card" href="week2/security-control-course.html">
+      <div class="meta"><span class="tag sec">보안관제</span><span class="tag doc">2주차</span></div>
+      <div class="title">리눅스 계정과 권한 관리</div>
+      <div class="desc">계정 정책과 sudo 설정, 파일 권한과 SUID 점검, 관제 관점의 이상 징후 판별</div>
+    </a>
+  </div>
+
+  <h2>2주차 부속자료</h2>
+  <div class="grid">
+    <a class="card" href="week2/cyber-security-index.html">
+      <div class="meta"><span class="tag doc">통합 포털</span></div>
+      <div class="title">2주차 통합 포털 (교안·대본 한 화면)</div>
+      <div class="desc">2주차 교안과 강의 대본을 한 페이지에서 고르는 인덱스</div>
+    </a>
+    <a class="card" href="week2/vuln-assessment-script.html">
+      <div class="meta"><span class="tag doc">강의 대본</span></div>
+      <div class="title">취약점 진단 2주차 대본</div>
+    </a>
+    <a class="card" href="week2/security-control-script.html">
+      <div class="meta"><span class="tag doc">강의 대본</span></div>
+      <div class="title">보안관제 2주차 대본</div>
+    </a>
+  </div>
+
+  <div class="note">
+    <strong>보는 방법</strong><br>
+    화면 아래(3주차) 또는 오른쪽 아래(2주차)의 <strong>다음 ▶</strong> 버튼으로 장을 넘깁니다. 키보드는 →, ←, Space 로도 넘어갑니다.<br>
+    3주차 교안은 화면 폭에 맞춰 자동으로 줄어들며, 휴대폰을 가로로 돌리면 가장 읽기 좋습니다. 2주차 교안은 세로 화면용 레이아웃을 따로 갖추고 있습니다.
+  </div>
+
+  <footer>
+    용인대학교 매치업 사이버보안 심화과정 · 박민순<br>
+    문의는 강의 시간에 말씀해 주세요.
+  </footer>
+</div>
+</body>
+</html>
