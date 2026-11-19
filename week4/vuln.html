@@ -684,8 +684,15 @@ code{font-weight:800}
   .ending .efoot div{max-width:none}
 }
 @media (max-width:560px){
-  :root{--s:0.86px}
+  :root{--s:1px}
   .tail{}
+  /* 390px 세로: 헤더 한 줄이 넘치지 않게 — 라벨은 말줄임, 배지는 숨김, 페이지번호는 오른쪽 고정 */
+  .hh{gap:calc(var(--s)*8)}
+  .hh .klbl{min-width:0;flex:1 1 auto;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .hh .bdg{display:none}
+  .hh .pgno{flex:none;margin-left:auto;white-space:nowrap}
+  .cover h1{font-size:calc(var(--s)*33);line-height:1.26;max-width:100%}
+  .cover h1 span{font-size:calc(var(--s)*25);line-height:1.3;white-space:normal;overflow-wrap:anywhere;max-width:100%}
   .certgrid{grid-template-columns:1fr;grid-template-rows:none;grid-auto-rows:auto}
   .s2prof .figbox{width:calc(var(--s)*136)}
   .s2career .tbl td.k{width:calc(var(--s)*128)}
@@ -732,14 +739,15 @@ code{font-weight:800}
   .stitle{font-size:calc(var(--s)*24)}
   .body{gap:calc(var(--s)*12)}
   .panel{padding:calc(var(--s)*12)}
-  .term{font-size:calc(var(--s)*13.5);overflow-x:auto}
+  .term{font-size:calc(var(--s)*13.5);overflow-x:auto;overscroll-behavior-x:contain}
   .term .tl{white-space:pre-wrap}
   .kv .r{grid-template-columns:calc(var(--s)*104) 1fr}
   .tbl th,.tbl td{font-size:calc(var(--s)*14.5);padding:calc(var(--s)*6) calc(var(--s)*7)}
   .tbl .mo{white-space:normal;word-break:break-all}
   .browser{min-height:calc(var(--s)*220)}
-  .fig{min-height:0;max-width:100%;overflow-x:auto;overflow-y:hidden;justify-content:flex-start;align-items:flex-start;display:block}
-  .fig svg{min-width:calc(var(--s)*780);height:auto}
+  .fig{min-height:0;max-width:100%;overflow-x:auto;overflow-y:hidden;justify-content:flex-start;align-items:flex-start;display:block;
+    overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch}
+  .fig svg{min-width:calc(var(--s)*640);height:auto}
   .sw>*,.rv,.panel,.body>*{min-width:0}
   .tri{grid-template-columns:1fr}
   .dock .sess{display:none}
@@ -2948,6 +2956,10 @@ code{font-weight:800}
       this.since = 99;
       this.hover = false;
       this.loop = !!o.loop;
+      // 2026-11-19: 끝까지 재생한 뒤 몇 초 쉬었다가 다시 재생
+      this.repeat = !!o.repeat;
+      this.holdDur = o.hold == null ? 3 : o.hold;
+      this.holdT = 0;
       this.vis = false;
       this.paused = false;
       this.waveT = -1;
@@ -2981,6 +2993,7 @@ code{font-weight:800}
       if (this.def.loopOnly || reduced.matches) {
         return;
       }
+      this.holdT = 0;
       if (!this.on) {
         this.on = true;
         this.u = 0;
@@ -3016,7 +3029,19 @@ code{font-weight:800}
             this.on = false;
             this.u = 0;
             this.since = 0;
+            if (this.repeat) {
+              this.holdT = this.holdDur;
+            }
           }
+        }
+        return;
+      }
+      if (this.holdT > 0) {
+        this.holdT -= dt;
+        this.since += dt;
+        if (this.holdT <= 0) {
+          this.holdT = 0;
+          this.play();
         }
         return;
       }
@@ -3209,6 +3234,8 @@ code{font-weight:800}
       const play = this.getAttribute('play') || 'click';
       const v = add(this.cv, id, {
         loop: play === 'loop',
+        repeat: play === 'view' || play === 'loop',
+        hold: this.hasAttribute('hold') ? Number(this.getAttribute('hold')) : 3,
         ground: !this.hasAttribute('no-ground'),
         floor: !this.hasAttribute('no-floor'),
         zoom: Number(this.getAttribute('zoom')) || 1,
@@ -3652,12 +3679,27 @@ if(el&&el.v){el.v.on=false;el.v.u=0;el.v.play();}})
       wake();
     });
     /* 터치 스와이프: 입력·버튼·시뮬레이터 조작부는 제외 */
-    var sx=null,sy=null;
+    /* 2026-11-19: 가로 스크롤 상자(도해·표·터미널) 안에서 시작했거나 그 상자가 실제로
+       가로 스크롤된 제스처는 페이지를 넘기지 않는다. */
+    var sx=null,sy=null,sbx=null;
+    function hBox(el){
+      var p=el;
+      while(p&&p!==document.body&&p.nodeType===1){
+        var cs=window.getComputedStyle(p);
+        if((cs.overflowX==='auto'||cs.overflowX==='scroll')&&p.scrollWidth>p.clientWidth+1) return p;
+        p=p.parentElement;
+      }
+      return null;
+    }
     document.addEventListener('touchstart',function(e){
-      if(e.target.closest('input, select, button, .simbar, .dock, .toc')){sx=null;sy=null;return;}
+      sx=null;sy=null;sbx=null;
+      if(e.target.closest('input, select, button, .simbar, .dock, .toc')) return;
+      var b=hBox(e.target);
+      if(b){sbx=b;return;}
       sx=e.touches[0].clientX; sy=e.touches[0].clientY;
     },{passive:true});
     document.addEventListener('touchend',function(e){
+      if(sbx){sbx=null;return;}
       if(sx===null||sy===null) return;
       var dx=e.changedTouches[0].clientX-sx, dy=e.changedTouches[0].clientY-sy;
       sx=null; sy=null;
