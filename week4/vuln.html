@@ -1139,7 +1139,7 @@ code{font-weight:800}
   <h2 class="stitle">찾고, 받고, 확인한다: search → pull → images</h2>
   <div class="body stack">
     <div class="rv" style="--i:0"><div class="steps loop" style="--cols:repeat(3,1fr)"><div class="step" style="--n:0"><span class="sn">STEP 1</span><span class="sx">search</span><span class="sy">허브에서 이미지를 찾는다</span><span class="sar"></span></div><div class="step" style="--n:1"><span class="sn">STEP 2</span><span class="sx">pull</span><span class="sy">이미지를 내려받는다</span><span class="sar"></span></div><div class="step" style="--n:2"><span class="sn">STEP 3</span><span class="sx">images</span><span class="sy">받은 이미지를 확인한다</span><span class="sar"></span></div></div></div>
-    <div class="rv" style="--i:1;flex:1;min-height:0;display:flex"><div class="term mid"><div class="bar"><i></i><i></i><i></i><span>예시 출력</span></div><span class="tl c">sudo docker search nginx</span><span class="tl o">NAME      DESCRIPTION                       STARS     OFFICIAL</span><span class="tl o">nginx     Official build of Nginx.          20000+    [OK]</span><span class="tl o">nginxinc/nginx-unprivileged   Unprivileged NGINX   500+</span><span class="tl c">sudo docker pull nginx:latest</span><span class="tl o">latest: Pulling from library/nginx</span><span class="tl o">Digest: sha256:4c0fdaa8b634...</span><span class="tl gg">Status: Downloaded newer image for nginx:latest</span><span class="tl c">sudo docker images</span><span class="tl o">REPOSITORY   TAG      IMAGE ID       CREATED        SIZE</span><span class="tl h">nginx        latest   1a7c9d0e2b44   2 weeks ago    192MB</span></div></div>
+    <div class="rv" style="--i:1;flex:1;min-height:0;display:flex"><div class="term mid"><div class="bar"><i></i><i></i><i></i><span>예시 출력</span></div><span class="tl c">sudo docker search nginx</span><span class="tl o">NAME                           DESCRIPTION               STARS     OFFICIAL   AUTOMATED</span><span class="tl o">nginx                          Official build of Nginx.  20000+    [OK]</span><span class="tl o">nginxinc/nginx-unprivileged    Unprivileged NGINX        500+                 [OK]</span><span class="tl c">sudo docker pull nginx:latest</span><span class="tl o">latest: Pulling from library/nginx</span><span class="tl o">Digest: sha256:4c0fdaa8b634...</span><span class="tl gg">Status: Downloaded newer image for nginx:latest</span><span class="tl c">sudo docker images</span><span class="tl o">REPOSITORY   TAG      IMAGE ID       CREATED        SIZE</span><span class="tl h">nginx        latest   1a7c9d0e2b44   2 weeks ago    192MB</span></div></div>
   </div>
   <div class="take"><b>정리</b><p>받은 이미지는 images 목록에 나타납니다. 다음은 실행입니다.</p></div>
   <div class="foot"><span>원본 4-1 p.8</span></div>
@@ -1334,8 +1334,8 @@ code{font-weight:800}
       <div class="pbody">
         <table class="tbl fill">
           <tbody>
-            <tr><td class="mo" style="width:calc(var(--s)*160)">NetworkSettings</td><td>IP 주소, 포트 매핑, 네트워크 모드</td></tr>
-            <tr><td class="mo">Driver</td><td>네트워크 드라이버 (bridge · host · overlay)</td></tr>
+            <tr><td class="mo" style="width:calc(var(--s)*160)">NetworkSettings</td><td>IP 주소, 포트 매핑, Networks.&lt;망&gt;.Driver(bridge 등)</td></tr>
+            <tr><td class="mo">Driver</td><td>스토리지 드라이버 (overlay2 등)</td></tr>
             <tr><td class="mo">Mounts</td><td>마운트된 볼륨, 바인드 마운트</td></tr>
             <tr><td class="mo">HostConfig</td><td>CPU·메모리 제한, 포트 바인딩, 재시작 정책</td></tr>
           </tbody>
@@ -1416,13 +1416,13 @@ code{font-weight:800}
   <h2 class="stitle">이미지와 컨테이너는 /var/lib/docker에 있고 root만 들어간다</h2>
   <div class="body g21">
     <div class="stack rv" style="--i:0">
-      <div class="rv" style="--i:0"><div class="lock glow "><span class="lk k k1"></span><span class="lk k k2"></span><span class="lk k k3"></span><span class="lk k k4"></span><span class="lk t"></span><span class="lk b"></span><span class="lk l"></span><span class="lk r"></span><div class="term "><div class="bar"><i></i><i></i><i></i><span>root 권한으로만 접근</span></div><span class="tl c">sudo ls /var/lib/docker</span><span class="tl o"><해시>   <해시>   <해시>   <해시>   <해시></span><span class="tl cm"># 각 해시 디렉터리에 설정 파일·로그 파일이 저장되고 업데이트됨</span></div></div></div>
+      <div class="rv" style="--i:0"><div class="lock glow "><span class="lk k k1"></span><span class="lk k k2"></span><span class="lk k k3"></span><span class="lk k k4"></span><span class="lk t"></span><span class="lk b"></span><span class="lk l"></span><span class="lk r"></span><div class="term "><div class="bar"><i></i><i></i><i></i><span>root 권한으로만 접근</span></div><span class="tl c">sudo ls /var/lib/docker</span><span class="tl o">buildkit  containers  image  network  overlay2  plugins  volumes</span><span class="tl c">sudo ls /var/lib/docker/containers</span><span class="tl o">2ad5210e9c3b  8f41c0d7a2e9</span><span class="tl cm"># containers/&lt;컨테이너 ID&gt;/ 안에 설정·로그 파일이 쌓인다</span></div></div></div>
       <div class="p sm">도커 이미지와 동작하고 있는 컨테이너는 <b>/var/lib/docker</b> 공간에 저장됩니다. 이 디렉터리는 <b>관리자 권한(root)</b>만 접근할 수 있습니다.</div>
     </div>
     <div class="panel soft rv" style="--i:1">
-      <div class="ptitle"><span class="ix">INSIDE</span>해시 디렉터리</div>
+      <div class="ptitle"><span class="ix">INSIDE</span>containers/&lt;ID&gt;/</div>
       <div class="pbody">
-        <div class="p">각 <b>해시 값</b>으로 이루어진 디렉터리에 설정 파일과 로그 파일 등이 저장되고 업데이트됩니다.</div>
+        <div class="p">최상위에는 <b>overlay2</b>·<b>containers</b>·<b>volumes</b> 같은 이름의 디렉터리가 있고, 컨테이너별 <b>ID 디렉터리</b>는 <b>containers/&lt;컨테이너 ID&gt;/</b> 아래에 있습니다. 그 안에 <b>&lt;ID&gt;-json.log</b>·config.v2.json 같은 설정·로그 파일이 저장됩니다.</div>
         <div class="cap" style="margin-top:auto">그래서 파일을 직접 만질 때는 sudo가 필요합니다.</div>
       </div>
     </div>
@@ -1453,8 +1453,7 @@ code{font-weight:800}
       <div class="ptitle" style="border-bottom:0;margin-bottom:0"><span class="ix">01</span>파일을 직접 연다</div>
       <div class="term" style="flex:none;height:calc(var(--s)*228)">
         <span class="tl c">sudo cat /var/lib/docker/containers/&lt;해시&gt;/&lt;해시&gt;-json.log</span>
-        <span class="tl o">{"log":"172.17.0.1 - - [16/Nov/2026:10:22:41 +0000] "GET / HTTP/1.1" 200 615
-","stream":"stdout","time":"2026-11-16T10:22:41.512Z"}</span>
+        <span class="tl o">{"log":"172.17.0.1 - - [16/Nov/2026:10:22:41 +0000] \"GET / HTTP/1.1\" 200 615\n","stream":"stdout","time":"2026-11-16T10:22:41.512Z"}</span>
       </div>
       <div class="cap">경로를 알아야 열 수 있고, json 그대로 보인다.</div>
     </div>
@@ -1701,6 +1700,7 @@ code{font-weight:800}
     <div class="rv" style="--i:0;display:flex;min-height:0;align-items:center"><div class="term big"><div class="bar"><i></i><i></i><i></i><span>새 망에 연결</span></div><span class="tl c">sudo docker run -itd --name=custom-web -p 8003:80 \</span><span class="tl cx">--net=web-net1 nginx</span><span class="tl c">sudo docker inspect custom-web | grep IPAddress</span><span class="tl h">            "IPAddress": "172.18.0.2",</span><span class="tl c">sudo docker ps</span><span class="tl o">CONTAINER ID   IMAGE   PORTS                  NAMES</span><span class="tl o">a1b2c3d4e5f6   nginx   0.0.0.0:8003-&gt;80/tcp   custom-web</span></div></div>
     <div class="stack rv" style="--i:1">
       <div class="p">새로 만든 가상 네트워크를 컨테이너 <b>생성 시</b> 연결합니다. 연결한 뒤 inspect로 네트워크 할당 정보를 보면 <b>IP가 순서대로</b> 할당된 것을 볼 수 있습니다.</div>
+      <div class="p">grep IPAddress는 <b>여러 줄</b>이 나옵니다 — 그중 <b>Networks.web-net1</b>의 IPAddress가 새 망에서 받은 주소입니다.</div>
       <div class="kv">
         <div class="r"><div class="h">--net</div><div class="v">어느 망에 붙일지</div></div>
         <div class="r"><div class="h">inspect</div><div class="v">받은 IP를 확인</div></div>
@@ -1803,6 +1803,7 @@ code{font-weight:800}
           <div class="li"><span class="d"></span><div>반드시 <b>--ip-range 안의 주소</b>여야 한다</div></div>
           <div class="li"><span class="d"></span><div>같은 망의 다른 컨테이너와 <b>겹치면 안 된다</b></div></div>
           <div class="li"><span class="d"></span><div>대역 밖 주소를 주면 docker가 거부한다</div></div>
+          <div class="li"><span class="d"></span><div><b>--ip</b>는 <b>--net으로 붙인 사용자 정의 망</b>에서만 쓴다 — 기본 bridge에서는 거부된다</div></div>
         </div>
       </div>
     </div>
@@ -1953,7 +1954,7 @@ code{font-weight:800}
   <circle class="pk a" r="6" cx="0" cy="0" style="offset-path:path('M166 113 L292 83');--pd:2.8s;--pdel:1s"/>
   <circle class="pk a" r="6" cx="0" cy="0" style="offset-path:path('M518 69 L632 69');--pd:2.8s;--pdel:1.6s"/>
 </svg></div></div>
-    <div class="rv" style="--i:2;flex:1;min-height:0;display:flex;align-items:center"><div class="term "><div class="bar"><i></i><i></i><i></i><span>예시 출력</span></div><span class="tl c">sudo docker stats</span><span class="tl o">CONTAINER ID   NAME           CPU %   MEM USAGE / LIMIT     MEM %   NET I/O        BLOCK I/O</span><span class="tl h">a1b2c3d4e5f6   custom-web1    0.02%   6.9MiB / 7.66GiB      0.09%   1.2kB / 0B     0B / 0B</span><span class="tl o">b2c3d4e5f6a1   custom-web2    0.01%   6.8MiB / 7.66GiB      0.09%   1.1kB / 0B     0B / 0B</span><span class="tl o">c3d4e5f6a1b2   custom-web3    0.01%   6.8MiB / 7.66GiB      0.09%   1.0kB / 0B     0B / 0B</span></div></div>
+    <div class="rv" style="--i:2;flex:1;min-height:0;display:flex;align-items:center"><div class="term "><div class="bar"><i></i><i></i><i></i><span>예시 출력</span></div><span class="tl c">sudo docker stats</span><span class="tl o">CONTAINER ID  NAME          CPU %   MEM USAGE / LIMIT   MEM %   NET I/O        BLOCK I/O     PIDS</span><span class="tl h">a1b2c3d4e5f6  custom-web1   0.02%   6.9MiB / 7.66GiB    0.09%   1.2kB / 0B     0B / 0B       2</span><span class="tl o">b2c3d4e5f6a1  custom-web2   0.01%   6.8MiB / 7.66GiB    0.09%   1.1kB / 0B     0B / 0B       2</span><span class="tl o">c3d4e5f6a1b2  custom-web3   0.01%   6.8MiB / 7.66GiB    0.09%   1.0kB / 0B     0B / 0B       2</span></div></div>
   </div>
   <div class="take"><b>정리</b><p>호스트 전체가 아니라 컨테이너별 수치라는 점이 핵심입니다.</p></div>
   <div class="foot"><span>원본 프로젝트 p.8 · 실시간으로 갱신되는 화면</span></div>
